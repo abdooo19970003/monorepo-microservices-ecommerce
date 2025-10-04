@@ -10,5 +10,12 @@
   },
   "dependencies": {
     "@prisma/client": "^6.16.3"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "*",
+    "@types/node": "24.6.2"
+  },
+  "exports": {
+    ".": "./src/index.ts"
   }
 }
