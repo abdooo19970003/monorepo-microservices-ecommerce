@@ -1,0 +1,46 @@
+{
+  "name": "Get All Products",
+  "request": {
+    "type": "http",
+    "url": "{{PRODUCT_SERVICE_URL}}/products",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [
+      {
+        "id": 0.9540579098105351,
+        "key": "search",
+        "value": "product",
+        "isEnabled": true
+      },
+      {
+        "id": 0.2405006066238773,
+        "key": "sort",
+        "value": "desc",
+        "isEnabled": true
+      },
+      {
+        "id": 0.7687845292441988,
+        "key": "limit",
+        "value": "",
+        "isEnabled": true
+      },
+      {
+        "id": 0.2162514692215589,
+        "key": "page",
+        "value": "",
+        "isEnabled": true
+      }
+    ],
+    "headers": [],
+    "body": null,
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

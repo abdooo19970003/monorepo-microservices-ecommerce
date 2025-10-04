@@ -1,8 +1,8 @@
 {
-  "name": "test",
+  "name": "Get Product By Id",
   "request": {
     "type": "http",
-    "url": "{{PRODUCT_SERVICE_URL}}/test",
+    "url": "{{PRODUCT_SERVICE_URL}}/products/5",
     "scripts": {
       "preRequest": "",
       "postResponse": ""

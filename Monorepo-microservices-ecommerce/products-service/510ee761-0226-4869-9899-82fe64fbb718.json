@@ -1,0 +1,39 @@
+{
+  "name": "Create Product",
+  "request": {
+    "type": "http",
+    "url": "{{PRODUCT_SERVICE_URL}}/products",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [
+      {
+        "id": 1759564379570,
+        "key": "name",
+        "value": "product one",
+        "isEnabled": false
+      },
+      {
+        "id": 1759564401279,
+        "key": "",
+        "value": "",
+        "isEnabled": false
+      }
+    ],
+    "headers": [],
+    "body": "{\n  \"name\": \"product three\",\n  \"shortDescription\":\"short description\",\n    \"description\":\"Descripton about the product\",\n    \"price\": 30.5,\n    \"sizes\": [\"XS\",\"S\",\"M\",\"L\"],\n    \"colors\":[\"Red\",\"Green\",\"White\"],\n    \"images\":{},\n    \"categorySlug\":\"test\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"name\": \"product three\",\n  \"shortDescription\":\"short description\",\n    \"description\":\"Descripton about the product\",\n    \"price\": 30.5,\n    \"sizes\": [\"XS\",\"S\",\"M\",\"L\"],\n    \"colors\":[\"Red\",\"Green\",\"White\"],\n    \"images\":{},\n    \"categorySlug\":\"test\"\n}",
+      "form": [],
+      "multipartForm": []
+    },
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

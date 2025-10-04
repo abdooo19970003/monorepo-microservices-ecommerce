@@ -1,0 +1,26 @@
+{
+  "name": "Update Category",
+  "request": {
+    "type": "http",
+    "url": "{{PRODUCT_SERVICE_URL}}/categories/5",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\": \"TEST\",\n  \"slug\": \"slugy\",\n  \"description\": \"test decription for nothing\"\n}\n",
+    "bodyContainer": {
+      "text": "{\n  \"name\": \"TEST\",\n  \"slug\": \"slugy\",\n  \"description\": \"test decription for nothing\"\n}\n",
+      "form": [],
+      "multipartForm": []
+    },
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

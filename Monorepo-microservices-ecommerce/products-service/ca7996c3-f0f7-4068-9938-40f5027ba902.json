@@ -1,13 +1,13 @@
 {
-  "name": "test",
+  "name": "Delete Category",
   "request": {
     "type": "http",
-    "url": "{{PRODUCT_SERVICE_URL}}/test",
+    "url": "{{PRODUCT_SERVICE_URL}}/categories/5",
     "scripts": {
       "preRequest": "",
       "postResponse": ""
     },
-    "method": "GET",
+    "method": "DELETE",
     "queryParams": [],
     "headers": [],
     "body": null,

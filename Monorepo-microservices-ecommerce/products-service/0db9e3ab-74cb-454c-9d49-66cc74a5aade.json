@@ -1,0 +1,26 @@
+{
+  "name": "Update Product",
+  "request": {
+    "type": "http",
+    "url": "{{PRODUCT_SERVICE_URL}}/products/2",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "PUT",
+    "queryParams": [],
+    "headers": [],
+    "body": "{\n  \"name\":\"product 2\"\n}",
+    "bodyContainer": {
+      "text": "{\n  \"name\":\"product 2\"\n}",
+      "form": [],
+      "multipartForm": []
+    },
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}

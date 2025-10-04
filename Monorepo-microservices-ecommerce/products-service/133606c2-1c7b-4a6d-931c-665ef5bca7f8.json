@@ -1,0 +1,26 @@
+{
+  "name": "Create Category",
+  "request": {
+    "type": "http",
+    "url": "{{PRODUCT_SERVICE_URL}}/categories",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "POST",
+    "queryParams": [],
+    "headers": [],
+    "body": "{ \"name\": \"test 2\", \"slug\": \"test-2\", \"description\": \"test category\" }\n",
+    "bodyContainer": {
+      "text": "{ \"name\": \"test 2\", \"slug\": \"test-2\", \"description\": \"test category\" }\n",
+      "form": [],
+      "multipartForm": []
+    },
+    "contentType": "application/json",
+    "auth": {
+      "currentAuthType": "INHERIT",
+      "authConfigStore": {}
+    },
+    "pathVariables": []
+  }
+}
