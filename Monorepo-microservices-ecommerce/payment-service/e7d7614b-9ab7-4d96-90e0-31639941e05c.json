@@ -2,7 +2,7 @@
   "name": "test",
   "request": {
     "type": "http",
-    "url": "{{PRODUCT_SERVICE_URL}}/test",
+    "url": "https://app.requestly.io/echo",
     "scripts": {
       "preRequest": "",
       "postResponse": ""

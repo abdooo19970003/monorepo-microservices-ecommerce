@@ -1,0 +1,14 @@
+{
+  "name": "@repo/products-db",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev --skip-generate",
+    "db:deploy": "npx prisma migrate deploy",
+    "db:studio": "npx prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.3"
+  }
+}

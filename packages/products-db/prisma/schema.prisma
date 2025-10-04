@@ -1,0 +1,43 @@
+// Define your models here and run `npx prisma migrate dev` to create migrations for your database.
+// Use `npx prisma db pull` to introspect your database and update this schema.
+// Use `npx prisma generate` to generate Prisma Client or other tools.  
+// Use `npx prisma studio` to open Prisma Studio and view and edit data in your database.
+// Use `npx prisma format` to format your schema file.
+// Use `npx prisma validate` to validate your schema.
+// Use `npx prisma db push` to push your Prisma schema state to the database without generating migrations.
+// Use `npx prisma migrate reset` to reset your database and apply all migrations.  
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Product {
+  id               Int       @id @default(autoincrement())
+  name             String
+  shortDescription String
+  description      String?
+  price            Float
+  sizes            String[]
+  colors           String[]
+  images           Json
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  Category         Category? @relation(fields: [categorySlug], references: [slug])
+  categorySlug     String?
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  slug        String    @unique
+  description String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}

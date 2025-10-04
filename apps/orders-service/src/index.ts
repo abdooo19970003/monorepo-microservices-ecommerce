@@ -1,8 +1,13 @@
-import fastify from "fastify";
+import Fastify, { FastifyReply, FastifyRequest } from "fastify";
+import clerk from "@clerk/fastify";
+import { shouldBeUser } from "./middleware/authMiddleware.js";
 
-const app = fastify()
+const fastify = Fastify()
 
-app.get("/health", async (req, reply) => {
+fastify.register(clerk.clerkPlugin)
+
+
+fastify.get("/health", async (req, reply) => {
   return {
     status: "ok",
     uptime: process.uptime(),
@@ -12,9 +17,17 @@ app.get("/health", async (req, reply) => {
 })
 
 
+fastify.get("/test", { preHandler: [shouldBeUser] }, async (req: FastifyRequest, reply: FastifyReply) => {
+  console.log("/test endpoint called from orders-service");
+
+  return { message: "User is authenticated", auth: req.userId }
+
+
+})
+
 const start = async () => {
   try {
-    await app.listen({ port: 8001 })
+    await fastify.listen({ port: 8001 })
     console.log("Orders-service is runing on port 8001");
 
   } catch (error) {
@@ -25,4 +38,4 @@ const start = async () => {
 
 start()
 
-export default app;
+export default fastify;

@@ -12,6 +12,7 @@
     "dev": "tsx --watch --env-file=.env src/index.ts"
   },
   "dependencies": {
+    "@clerk/express": "^1.7.36",
     "cors": "^2.8.5",
     "express": "^5.1.0"
   },

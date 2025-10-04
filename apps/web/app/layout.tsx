@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import localFont from 'next/font/local'
 import './globals.css'
 import { ClerkProvider } from '@clerk/nextjs'
+import Link from 'next/link'
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -26,7 +27,10 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang='en'>
         <body className={`${geistSans.variable} ${geistMono.variable}`}>
-          {children}
+          <div className='min-h-screen flex flex-col items-center justify-center'>
+            {children}
+            <Link href='/'> Back To Home </Link>
+          </div>
         </body>
       </html>
     </ClerkProvider>
