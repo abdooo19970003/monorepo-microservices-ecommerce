@@ -1,5 +1,5 @@
 {
-  "name": "Untitled Request",
+  "name": "webhook",
   "request": {
     "type": "http",
     "url": "https://app.requestly.io/echo",
@@ -15,7 +15,6 @@
     "auth": {
       "currentAuthType": "INHERIT",
       "authConfigStore": {}
-    },
-    "pathVariables": []
+    }
   }
 }

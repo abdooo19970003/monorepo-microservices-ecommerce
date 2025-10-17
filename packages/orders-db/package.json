@@ -1,0 +1,18 @@
+{
+  "name": "@repo/orders-db",
+  "version": "1.0.0",
+  "license": "ISC",
+  "description": "",
+  "type": "module",
+  "main": "src/index.ts",
+  "devDependencies": {
+    "@repo/typescript-config": "*"
+  },
+  "dependencies": {
+    "@types/node": "^22.18.8",
+    "mongoose": "^8.19.0"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

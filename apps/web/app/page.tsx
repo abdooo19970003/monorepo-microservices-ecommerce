@@ -1,14 +1,6 @@
-import Image, { type ImageProps } from 'next/image'
-import { Button } from '@repo/ui/button'
-import styles from './page.module.css'
 import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 import ProfileButton from '../components/ProfileButton'
 import Link from 'next/link'
-
-type Props = Omit<ImageProps, 'src'> & {
-  srcLight: string
-  srcDark: string
-}
 
 export default function Home() {
   return (

@@ -1,3 +1,7 @@
+# complete the course from this vedio link
+## 04:05:21 kafka <https://youtu.be/O9YnPuKC4w4?si=JnNsAVQ77ML37fkX&t=14721>
+[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/O9YnPuKC4w4?si=JnNsAVQ77ML37fkX&t=14721)
+
 # Turborepo starter
 
 This Turborepo starter is maintained by the Turborepo core team.
@@ -137,3 +141,4 @@ Learn more about the power of Turborepo:
 ## database variables
 ### products 
 ![alt text](image.png)
+

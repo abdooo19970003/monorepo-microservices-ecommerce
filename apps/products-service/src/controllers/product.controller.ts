@@ -1,21 +1,35 @@
 import { Request, Response } from "express";
 import { Prisma, prisma } from "@repo/products-db";
+import { producer } from "../utils/kafka";
+import { StripeProductType } from "@repo/types";
 
 export const createProduct = async (req: Request, res: Response) => {
   const data: Prisma.ProductCreateInput = req.body;
   const product = await prisma.product.create({ data });
+  producer.send(
+    "product-created",
+    {
+      value: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+      } as StripeProductType
+    },
+
+  )
   res.status(201).json(product);
 }
 export const updateProduct = async (req: Request, res: Response) => {
   const data: Prisma.ProductUpdateInput = req.body;
   const id = req.params.id;
   if (!id) return res.status(400).json({ message: "Id is required" });
-  const product = await prisma.product.update({ where: { id: Number(id) }, data });
+  const product = await prisma.product.update({ where: { id: id }, data });
   res.status(200).json(product);
 }
 export const deleteProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
-  await prisma.product.delete({ where: { id: Number(id) } });
+  await prisma.product.delete({ where: { id: id } });
+  producer.send("product-deleted", { value: { id } })
   res.status(200).json({ message: "Product deleted" });
 }
 
@@ -57,6 +71,6 @@ export const getAllProducts = async (req: Request, res: Response) => {
 }
 export const getProduct = async (req: Request, res: Response) => {
   const id = req.params.id;
-  const product = await prisma.product.findUnique({ where: { id: Number(id) } });
+  const product = await prisma.product.findUnique({ where: { id: id } });
   res.status(200).json(product);
 }

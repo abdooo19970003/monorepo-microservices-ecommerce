@@ -1,0 +1,22 @@
+{
+  "name": "@repo/kafka",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "kafkajs": "^2.2.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.1",
+    "typescript": "^5.1.6",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*"
+  }
+}

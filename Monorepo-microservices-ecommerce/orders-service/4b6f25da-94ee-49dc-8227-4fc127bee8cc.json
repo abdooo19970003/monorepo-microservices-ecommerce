@@ -1,0 +1,25 @@
+{
+  "name": "Get User Order",
+  "request": {
+    "type": "http",
+    "url": "{{ORDERS_SERVICE_URL}}/user-orders",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": null,
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zM1lQZkhhY2hIQU03MkZYUWpNekdHeG95dnUiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwOi8vbG9jYWxob3N0OjMwMDAiLCJleHAiOjE3NTk2MjkyMjAsImZ2YSI6WzEyNjksLTFdLCJpYXQiOjE3NTk2MjkxNjAsImlzcyI6Imh0dHBzOi8vdGhhbmtmdWwtbGFjZXdpbmctMzYuY2xlcmsuYWNjb3VudHMuZGV2IiwibmJmIjoxNzU5NjI5MTUwLCJzaWQiOiJzZXNzXzMzYVIwZnVNaEppRDJXNmlQVHFaSTZ1Ym95dyIsInN0cyI6ImFjdGl2ZSIsInN1YiI6InVzZXJfMzNZUjA4dHM2b1RjaG9Xd2tJWVZoRnRGT1F1IiwidiI6Mn0.UhQMe5hAoWe05sghdGNzRvwV31LIajbILolBJrbV2U33e7tHO3_qLEQw1NNEN9zA_EmY9AfEJ5kjnGGwU-sTH8_oBygitQc3Q1xJ9VxOJyZWK8oISgRsDicjeC9452kzLPSYdTJbp31p0BVw0wtrNPelijR2gxDZyRE7XNiN9ew0JIP87fCH1BPKwCWHQo-N1nXVxUZHi5ZD4J1yIKhbDcu2Utzp9If-1wSPx-Rd6sZDxws8jLhnij1yijQ5_087gj_WXxNiicEJ3Hv1b-KjPFxVCrxCy4CQpcU4xBSCA37ojowU3DsD_5rdqdCVrPV-MDu-VVSzy7DNXjxqxrSJQg"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}

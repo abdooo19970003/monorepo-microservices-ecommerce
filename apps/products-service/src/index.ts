@@ -5,6 +5,7 @@ import { shouldBeUser } from "./middleware/authMiddleware.js"
 
 import productRouter from "./routes/product.route"
 import categoryRouter from "./routes/category.route"
+import { consumer, producer } from "./utils/kafka.js"
 
 
 const app = express()
@@ -47,9 +48,16 @@ app.use((err: any, req: Request, res: Response) => {
 
 })
 
+const start = async () => {
+  await producer.connect()
+  await consumer.connect()
+
+  app.listen(8000, () => {
+    console.log("Products service is running on port 8000")
+  })
+}
+
 // run the app 
-app.listen(8000, () => {
-  console.log("Products service is running on port 8000")
-})
+start()
 
 

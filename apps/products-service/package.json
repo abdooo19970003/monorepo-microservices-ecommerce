@@ -15,10 +15,12 @@
     "@clerk/express": "^1.7.36",
     "cors": "^2.8.5",
     "express": "^5.1.0",
-    "@repo/products-db": "*"
+    "@repo/products-db": "*",
+    "@repo/kafka": "*"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
+    "@repo/types": "*",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "typescript": "~5.9.3"

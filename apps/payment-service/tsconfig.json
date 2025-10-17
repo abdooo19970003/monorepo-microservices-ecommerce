@@ -2,9 +2,10 @@
   "extends": "@repo/typescript-config/base.json",
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",
+    "module": "esnext",
     "strict": true,
     "verbatimModuleSyntax": true,
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "types": ["node"],
     "jsx": "react-jsx",
