@@ -6,14 +6,16 @@
     "db:generate": "npx prisma generate",
     "db:migrate": "npx prisma migrate dev --skip-generate",
     "db:deploy": "npx prisma migrate deploy",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "db:seed": "ts-node ./src/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3"
   },
   "devDependencies": {
     "@repo/typescript-config": "*",
-    "@types/node": "24.6.2"
+    "@types/node": "24.6.2",
+    "typescript": "^5.1.6"
   },
   "exports": {
     ".": "./src/index.ts"

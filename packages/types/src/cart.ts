@@ -3,7 +3,7 @@ import { type Product } from "@repo/products-db";
 
 
 export type CartItemType = Product & {
-  quantity: number,
+  quantity: number
   size: string,
   color: string,
 }

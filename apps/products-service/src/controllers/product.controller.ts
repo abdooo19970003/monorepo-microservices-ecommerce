@@ -15,7 +15,6 @@ export const createProduct = async (req: Request, res: Response) => {
         price: product.price,
       } as StripeProductType
     },
-
   )
   res.status(201).json(product);
 }

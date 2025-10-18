@@ -66,6 +66,48 @@ app.route("/webhook", webhookRoute)
 //   return c.json(res)
 // })
 
+// app.get("/seed-stripe", async (c) => {
+//   try {
+//     const res = await fetch(`${process.env.PRODUCT_SERVICE_URL}/products`);
+//     const products = await res.json();
+//     console.log(products);
+
+//     for (const product of products) {
+//       const stripeProduct = {
+//         name: product.name,
+//         default_price_data: {
+//           currency: "usd",
+//           unit_amount: product.price * 100,
+//         },
+//         metadata: {
+//           productId: String(product.id),
+//         },
+//         description: product.description,
+//         category: product.category,
+//       };
+
+//       try {
+//         const stripeRes = await stripe.products.create(stripeProduct);
+//         console.log({
+//           message: `PRODUCT CREATED IN STRIPE: ${product.name}`,
+//           stripeRes,
+//         });
+//       } catch (error) {
+//         console.error("Error creating product in Stripe:", error);
+//         // optional: continue loop or throw
+//       }
+//     }
+
+//     return c.json({ message: "PRODUCTS CREATED IN STRIPE" });
+//   } catch (error) {
+//     console.error("Error fetching products:", error);
+//     return c.json(
+//       { message: "ERROR FETCHING DATA FROM PRODUCT SERVICE", error },
+//       500
+//     );
+//   }
+// });
+
 
 const start = async () => {
   try {

@@ -36,6 +36,7 @@ const CartPage = () => {
     .reduce((acc: number, i: any) => acc + i.price * i.quantity, 0)
     .toFixed(2)
   const [shippingForm, setShippingForm] = useState<shippingFormInput>()
+  console.log(cart)
 
   return (
     <div className='flex flex-col gap-8 items-center justify-center pt-8 '>
@@ -93,9 +94,7 @@ const CartPage = () => {
                     <div className='rounded-lg relative w-32 '>
                       <Image
                         alt={p.name}
-                        src={
-                          (p.images as Record<string, string>)?.[p.color] || ''
-                        }
+                        src={(p.images as Record<string, string>)?.[p.color]!}
                         fill
                         className='object-contain '
                       />
@@ -109,9 +108,16 @@ const CartPage = () => {
                         <p>Size: {p.size}</p>
                         <p>Color: {p.color}</p>
                       </div>
-                      <p className='text-base font-semibold text-gray-800'>
+                      <p className='text-base text-gray-800'>
                         {' '}
-                        {p.price.toFixed(2)} $
+                        {p.price.toFixed(2)} $ x{' '}
+                        <span className='text-amber-600 font-semibold'>
+                          {p.quantity}
+                        </span>{' '}
+                        ={' '}
+                        <span className='font-semibold'>
+                          {(p.price * p.quantity).toFixed(2)} $
+                        </span>
                       </p>
                     </div>
                     <Button

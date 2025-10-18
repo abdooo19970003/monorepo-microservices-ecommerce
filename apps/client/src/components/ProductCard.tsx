@@ -35,7 +35,6 @@ const ProductCard = ({ p }: { p: ProductType }) => {
       color: selectedColor,
       size: selectedSize,
       quantity: 1,
-      images: (p.images as Record<string, string>)?.[selectedColor]!,
     }
 
     addToCart(cartProduct)
@@ -54,7 +53,10 @@ const ProductCard = ({ p }: { p: ProductType }) => {
       >
         <div className='w-full aspect-[2/3] relative hover:scale-105 transition-all duration-200'>
           <Image
-            src={(p.images as Record<string, string>)?.[selectedColor]!}
+            src={
+              (p.images as Record<string, string>)?.[selectedColor] ||
+              '/placeholder.jpg'
+            }
             fill
             alt={`${p.name}-${selectedColor}`}
             className='object-cover'

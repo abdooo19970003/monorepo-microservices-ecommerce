@@ -34,6 +34,7 @@ webhookRoute.post('/stripe', async (c) => {
           userId: session.client_reference_id,
           email: session.customer_details?.email,
           amount: session.amount_total,
+          currency: session.currency,
           status: session.payment_status === "paid" ? "success" : "failed",
           shippingAddress: session.customer_details?.address,
           products: line_items.data.map((item) => ({

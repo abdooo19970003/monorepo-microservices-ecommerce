@@ -4,13 +4,15 @@ import React from 'react'
 const page = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ cat: string }>
+  searchParams: Promise<{ category: string; sort: string; search: string }>
 }) => {
-  const { cat } = await searchParams
+  const { category, sort, search } = await searchParams
   return (
     <div>
       <ProductList
-        cat={cat}
+        category={category}
+        sort={sort}
+        search={search}
         params='Products'
       />
     </div>

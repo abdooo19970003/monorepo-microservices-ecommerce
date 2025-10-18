@@ -1,9 +1,10 @@
-import { ProductType } from '@repo/types'
 import NotFound from '../../../app/not-found'
 import ProductInteraction from '../../../components/ProductInteraction'
-import { productsData } from '../../../data'
 import Image from 'next/image'
 import React from 'react'
+import { getProductData } from '../../../data'
+import { ProductType } from '@repo/types'
+import { get } from 'http'
 
 export const generateMetadata = async ({
   params,
@@ -13,21 +14,19 @@ export const generateMetadata = async ({
   const { productId } = await params
 
   // TODO: Fetch data from database
-  const productData: ProductType | undefined = productsData.find(
-    (p) => p.id === productId
-  )
-  if (!productData) return NotFound()
-  const ogImage = (productData.images as Record<string, string>)?.[
-    productData.colors[0]!
+  const product: ProductType | undefined = await getProductData(productId)
+  if (!product) return NotFound()
+  const ogImage = (product.images as Record<string, string>)?.[
+    product.colors[0]!
   ]
   console.log(ogImage)
 
   return {
-    title: productData.name,
-    description: productData.description,
+    title: product.name,
+    description: product.description,
     openGraph: {
-      title: productData.name,
-      description: productData.description,
+      title: product.name,
+      description: product.description,
       images: {
         url: ogImage,
         width: 1200,
@@ -35,8 +34,8 @@ export const generateMetadata = async ({
       },
     },
     twitter: {
-      title: productData.name,
-      description: productData.description,
+      title: product.name,
+      description: product.description,
       images: ogImage,
     },
     robots: {
@@ -62,7 +61,7 @@ const SingleProductPage = async ({
   const { color, size } = await searchParams
   const { productId } = await params
   const id = productId
-  const productData = productsData.find((p) => p.id === id)
+  const productData = await getProductData(productId)
   if (!productData) return NotFound()
   return (
     <div className='flex flex-col lg:flex-row gap-4 md:gap-12 mt-12'>

@@ -4,14 +4,15 @@ import ProductList from '../components/ProductList'
 const Homepage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{ cat: string }>
+  searchParams: Promise<{ category: string; sort: string }>
 }) => {
-  const { cat } = await searchParams
+  const { category, sort } = await searchParams
   return (
     <div className=''>
       <Hero />
       <ProductList
-        cat={cat}
+        category={category}
+        sort={sort}
         params='Home'
       />
     </div>
