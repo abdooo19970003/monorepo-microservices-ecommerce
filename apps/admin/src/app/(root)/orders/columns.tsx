@@ -1,5 +1,4 @@
 'use client'
-import type { Payment } from './data'
 import type { ColumnDef } from '@tanstack/react-table'
 import {
   ArrowUpDown,
@@ -22,11 +21,11 @@ import {
 } from '../../../components/ui/dropdown-menu'
 import Link from 'next/link'
 import { Checkbox } from '../../../components/ui/checkbox'
+import { OrderType } from '@repo/types'
 
-export const PaymentColumns: ColumnDef<Payment>[] = [
+export const PaymentColumns: ColumnDef<OrderType>[] = [
   {
-    id: 'id',
-    accessorKey: 'id',
+    accessorKey: '_id',
     header: ({ table }) => (
       <Checkbox
         checked={
@@ -44,13 +43,28 @@ export const PaymentColumns: ColumnDef<Payment>[] = [
       />
     ),
   },
-  {
-    accessorKey: 'fullName',
-    header: 'Full Name',
-  },
+
   {
     accessorKey: 'email',
     header: 'Email',
+  },
+  {
+    accessorKey: 'createdAt',
+    header: ({ column }) => {
+      return (
+        <Button
+          variant='ghost'
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Date
+          <ArrowUpDown className='ml-2 h-4 w-4' />
+        </Button>
+      )
+    },
+    cell: ({ row }) =>
+      row.getValue('createdAt')
+        ? new Date(row.getValue('createdAt')).toLocaleDateString('tr')
+        : '-',
   },
   {
     accessorKey: 'status',
@@ -105,7 +119,7 @@ export const PaymentColumns: ColumnDef<Payment>[] = [
       const formatedAmount = new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
-      }).format(amount)
+      }).format(amount / 100)
       return <span className='font-semibold'>{formatedAmount}</span>
     },
   },
@@ -113,7 +127,7 @@ export const PaymentColumns: ColumnDef<Payment>[] = [
     id: 'actions',
     enableHiding: false,
     cell: ({ row }) => {
-      const payment = row.original
+      const order = row.original
       return (
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -131,13 +145,13 @@ export const PaymentColumns: ColumnDef<Payment>[] = [
           <DropdownMenuContent align='end'>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(order._id)}
             >
               Copy payment ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href={`/users/${payment.userId}`}>View customer</Link>
+              <Link href={`/users/${order.userId}`}>View customer</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>View payment details</DropdownMenuItem>
           </DropdownMenuContent>

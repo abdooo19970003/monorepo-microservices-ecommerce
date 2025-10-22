@@ -14,6 +14,7 @@ import {
 import { Button } from './ui/button'
 import { useTheme } from 'next-themes'
 import { SidebarTrigger } from './ui/sidebar'
+import { SignedIn, SignedOut, SignInButton, UserButton } from '@clerk/nextjs'
 
 const Navbar = () => {
   const { setTheme } = useTheme()
@@ -48,7 +49,7 @@ const Navbar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
         {/* Profile Menu */}
-        <DropdownMenu>
+        {/* <DropdownMenu>
           <DropdownMenuTrigger>
             <Avatar>
               <AvatarFallback>AE</AvatarFallback>
@@ -75,7 +76,13 @@ const Navbar = () => {
               <span>Logout</span>{' '}
             </DropdownMenuItem>
           </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu> */}
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
+        <SignedOut>
+          <SignInButton />
+        </SignedOut>
       </div>
     </nav>
   )

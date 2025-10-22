@@ -30,7 +30,7 @@ sessionRoute.post('/create-checkout-session', shouldBeUser, async (c) => {
       const unit_amount = await getStripProductPrice(String(item.id))
       return {
         price_data: {
-          currency: 'try',
+          currency: 'usd',
           product_data: {
             name: item.name,
           },

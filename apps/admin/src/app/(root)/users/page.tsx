@@ -6,12 +6,18 @@ import {
   BreadcrumbSeparator,
 } from '../../../components/ui/breadcrumb'
 import { LucideHome } from 'lucide-react'
-import { getData, type User } from './data'
-import { PaymentsDataTable } from './data-table'
+import { getUsersData } from './data'
+import { UsersDataTable } from './data-table'
 import { PaymentColumns } from './columns'
+import { auth } from '@clerk/nextjs/server'
 
-const PaymentsPage = async () => {
-  const data: User[] = await getData()
+const UsersPage = async () => {
+  const { getToken } = await auth()
+  const token = await getToken()
+  if (!token) {
+    console.log('Not Authanticated')
+  }
+  const { data } = await getUsersData(token!)
   const columns = PaymentColumns
   return (
     <div>
@@ -31,7 +37,7 @@ const PaymentsPage = async () => {
       <div className='mb-8 px-4 py-2 bg-secondary rounded-lg'>
         <h1 className='text-lg font-semibold'>All Users</h1>
         <div className=''>
-          <PaymentsDataTable
+          <UsersDataTable
             columns={columns}
             data={data}
           />
@@ -41,4 +47,4 @@ const PaymentsPage = async () => {
   )
 }
 
-export default PaymentsPage
+export default UsersPage

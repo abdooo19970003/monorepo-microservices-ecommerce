@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { use } from 'react'
 import {
   ChartConfig,
   ChartContainer,
@@ -8,36 +8,42 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from './ui/chart'
-import { Bar, BarChart, CartesianGrid, Legend, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { OrderChartType } from '@repo/types'
 
-const dummyData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-]
+// const dummyData = [
+//   { month: 'January', desktop: 186, mobile: 80 },
+//   { month: 'February', desktop: 305, mobile: 200 },
+//   { month: 'March', desktop: 237, mobile: 120 },
+//   { month: 'April', desktop: 73, mobile: 190 },
+//   { month: 'May', desktop: 209, mobile: 130 },
+//   { month: 'June', desktop: 214, mobile: 140 },
+// ]
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  total: {
+    label: 'Total Orders',
     color: 'var(--chart-1)',
   },
-  mobile: {
-    label: 'Mobile',
+  successful: {
+    label: 'Successful Orders',
     color: 'var(--chart-5)',
   },
 } satisfies ChartConfig
 
-const AppBarChart = () => {
+const AppBarChart = ({
+  dataPromise,
+}: {
+  dataPromise: Promise<OrderChartType[]>
+}) => {
+  const data = use(dataPromise)
   return (
     <div className='w-full h-full items-center'>
       <h1 className='text-lg mb-6 font-medium'>Total Revenu</h1>
       <ChartContainer config={chartConfig}>
         <BarChart
           accessibilityLayer
-          data={dummyData}
+          data={data}
           barGap='3%'
         >
           <CartesianGrid
@@ -61,15 +67,15 @@ const AppBarChart = () => {
           <ChartTooltip content={<ChartTooltipContent />} />
           <ChartLegend content={<ChartLegendContent />} />
           <Bar
-            dataKey='desktop'
-            fill={chartConfig.desktop.color}
-            label={chartConfig.desktop.label}
+            dataKey='total'
+            fill={chartConfig.total.color}
+            label={chartConfig.total.label}
             radius={3}
           />
           <Bar
-            dataKey='mobile'
-            fill={chartConfig.mobile.color}
-            label={chartConfig.mobile.label}
+            dataKey='successful'
+            fill={chartConfig.successful.color}
+            label={chartConfig.successful.label}
             radius={3}
           />
         </BarChart>

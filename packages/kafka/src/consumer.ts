@@ -10,12 +10,15 @@ export const createConsumer = (kafka: Kafka, groupId: string) => {
   }
 
   const subscribe = async (
-    topics: string[],
-    handler: (message: any) => Promise<void>) => {
-    await consumer.subscribe({ topics, fromBeginning: true })
+    topics: { topicName: string, topicHandler: (message: any) => Promise<void> }[]
+  ) => {
+    await consumer.subscribe({ topics: topics.map(topic => topic.topicName), fromBeginning: true })
     await consumer.run({
       eachMessage: async ({ topic, partition, message }) => {
         try {
+          const topicConfig = topics.find((t) => t.topicName === topic)
+          if (!topicConfig) return
+          const handler = topicConfig.topicHandler
           const value = message.value?.toString()
           if (value)
             await handler(JSON.parse(value))

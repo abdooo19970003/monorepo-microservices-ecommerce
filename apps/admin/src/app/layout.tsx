@@ -1,19 +1,11 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+import type { Metadata } from 'next'
 import { ThemeProvider } from '../components/providers/theme-provider'
 import { SidebarProvider } from '../components/ui/sidebar'
 import { cookies } from 'next/headers'
-
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
+import { ClerkProvider } from '@clerk/nextjs'
+import QueryProvider from '../components/providers/query-provider'
+import { Toaster } from '../components/ui/sonner'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -33,20 +25,23 @@ export default async function RootLayout({
       lang='en'
       suppressHydrationWarning
     >
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <SidebarProvider defaultOpen={sidebarOpen}>
-          <ThemeProvider
-            attribute='class'
-            enableSystem
-            enableColorScheme
-            disableTransitionOnChange
-            defaultTheme='system'
-          >
-            {children}
-          </ThemeProvider>
-        </SidebarProvider>
+      <body className={` antialiased`}>
+        <ClerkProvider>
+          <QueryProvider>
+            <SidebarProvider defaultOpen={sidebarOpen}>
+              <ThemeProvider
+                attribute='class'
+                enableSystem
+                enableColorScheme
+                disableTransitionOnChange
+                defaultTheme='system'
+              >
+                {children}
+                <Toaster />
+              </ThemeProvider>
+            </SidebarProvider>
+          </QueryProvider>
+        </ClerkProvider>
       </body>
     </html>
   )

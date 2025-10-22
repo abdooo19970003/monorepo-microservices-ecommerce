@@ -1,5 +1,4 @@
 'use client'
-import z from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from './ui/button'
@@ -18,22 +17,53 @@ import {
   SheetHeader,
   SheetTitle,
 } from './ui/sheet'
-
-export const newCategorySchema = z.object({
-  name: z.string().min(3).max(50),
-})
-export type NewCategoryFormType = z.infer<typeof newCategorySchema>
+import { toast } from 'sonner'
+import { Textarea } from './ui/textarea'
+import { type NewCategoryFormType, newCategorySchema } from '@repo/types'
+import { useAuth } from '@clerk/nextjs'
+import { useMutation } from '@tanstack/react-query'
 
 const NewCategorySheet = () => {
   const form = useForm<NewCategoryFormType>({
     resolver: zodResolver(newCategorySchema),
     defaultValues: {
       name: '',
+      description: '',
     },
   })
 
+  const { getToken } = useAuth()
+  const mutation = useMutation({
+    mutationFn: async (values: NewCategoryFormType) => {
+      const token = await getToken()
+      if (!token) {
+        throw new Error('Unauthorized')
+      }
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/categories`
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(values),
+      })
+      if (!response.ok) {
+        throw new Error('Faild to create category')
+      }
+    },
+    onError: (error) => {
+      toast.error('Faild to create category', {})
+    },
+    onSuccess: () => {
+      form.reset()
+      toast.success('Category created successfully')
+    },
+  })
   const submitHandler = (values: NewCategoryFormType) => {
+    mutation.mutate(values)
     console.log(values)
+    form.reset()
   }
 
   return (
@@ -60,9 +90,23 @@ const NewCategorySheet = () => {
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name='description'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Textarea {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <Button
               className='w-full'
               type='submit'
+              disabled={mutation.isLoading}
             >
               Create
             </Button>

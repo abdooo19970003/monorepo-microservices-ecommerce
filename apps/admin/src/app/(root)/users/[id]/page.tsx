@@ -40,7 +40,10 @@ import {
   Shield,
   Users,
 } from 'lucide-react'
-import React from 'react'
+import React, { use } from 'react'
+import { getUserDataById } from '../data'
+import { auth } from '@clerk/nextjs/server'
+import NotFound from '../../../not-found'
 
 function getContrastingTailwindColors() {
   const colorPairs = [
@@ -68,71 +71,79 @@ function getContrastingTailwindColors() {
   const index = Math.floor(Math.random() * colorPairs.length)
   return colorPairs[index]
 }
+const badgesData = [
+  {
+    title: 'admin',
+    description: 'Full access to all system features',
+    id: 1,
+    icon: Shield,
+  },
+  {
+    title: 'verified user',
+    description: 'Identity confirmed by platform moderators',
+    id: 2,
+    icon: CheckCircle,
+  },
+  {
+    title: 'developer',
+    description: 'Builds and maintains core application logic',
+    id: 3,
+    icon: Code,
+  },
+  {
+    title: 'contributor',
+    description: 'Actively shares content or code updates',
+    id: 4,
+    icon: GitBranch,
+  },
+  {
+    title: 'moderator',
+    description: 'Manages user activity and enforces rules',
+    id: 5,
+    icon: Gavel,
+  },
+  {
+    title: 'early adopter',
+    description: "Joined during platform's beta phase",
+    id: 6,
+    icon: Rocket,
+  },
+  {
+    title: 'bug hunter',
+    description: 'Reports and documents system bugs reliably',
+    id: 7,
+    icon: BugOff,
+  },
+  {
+    title: 'community helper',
+    description: 'Frequently assists other users with issues',
+    id: 8,
+    icon: Users,
+  },
+  {
+    title: 'content creator',
+    description: 'Publishes original media or educational posts',
+    id: 9,
+    icon: Camera,
+  },
+  {
+    title: 'security advisor',
+    description: 'Provides insights on platform vulnerabilities',
+    id: 10,
+    icon: Lock,
+  },
+]
+const SingleUserPage = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) => {
+  const { id } = await params
+  const { getToken } = await auth()
+  const token = await getToken()
 
-const SingleUserPage = () => {
-  const username = 'abdullah'
-  const badgesData = [
-    {
-      title: 'admin',
-      description: 'Full access to all system features',
-      id: 1,
-      icon: Shield,
-    },
-    {
-      title: 'verified user',
-      description: 'Identity confirmed by platform moderators',
-      id: 2,
-      icon: CheckCircle,
-    },
-    {
-      title: 'developer',
-      description: 'Builds and maintains core application logic',
-      id: 3,
-      icon: Code,
-    },
-    {
-      title: 'contributor',
-      description: 'Actively shares content or code updates',
-      id: 4,
-      icon: GitBranch,
-    },
-    {
-      title: 'moderator',
-      description: 'Manages user activity and enforces rules',
-      id: 5,
-      icon: Gavel,
-    },
-    {
-      title: 'early adopter',
-      description: "Joined during platform's beta phase",
-      id: 6,
-      icon: Rocket,
-    },
-    {
-      title: 'bug hunter',
-      description: 'Reports and documents system bugs reliably',
-      id: 7,
-      icon: BugOff,
-    },
-    {
-      title: 'community helper',
-      description: 'Frequently assists other users with issues',
-      id: 8,
-      icon: Users,
-    },
-    {
-      title: 'content creator',
-      description: 'Publishes original media or educational posts',
-      id: 9,
-      icon: Camera,
-    },
-    {
-      title: 'security advisor',
-      description: 'Provides insights on platform vulnerabilities',
-      id: 10,
-      icon: Lock,
-    },
-  ]
+  const userData = await getUserDataById(token!, id)
+  if (!userData || !userData.id) return <NotFound />
 
   return (
     <div>
@@ -150,10 +161,10 @@ const SingleUserPage = () => {
           <BreadcrumbSeparator />
           <BreadcrumbItem>
             <BreadcrumbLink
-              href={`/users/${username}`}
+              href={`/users/${id}`}
               className='capitalize'
             >
-              {username}
+              {userData?.firstName + ' ' + userData?.lastName}
             </BreadcrumbLink>
           </BreadcrumbItem>
         </BreadcrumbList>
@@ -192,15 +203,19 @@ const SingleUserPage = () => {
           <div className='bg-primary-foreground p-4 rounded-lg'>
             <div className='flex gap-4 mb-6'>
               <Avatar className='size-12'>
-                <AvatarFallback>AE</AvatarFallback>
-                <AvatarImage
-                  src={
-                    'https://avatars.githubusercontent.com/u/70283286?v=4&size=64'
-                  }
-                />
+                <AvatarFallback>
+                  {userData?.firstName && userData?.lastName
+                    ? userData?.firstName.charAt(0) +
+                      ' ' +
+                      userData?.lastName.charAt(0)
+                    : userData?.primaryEmailAddress?.emailAddress.charAt(0)}
+                </AvatarFallback>
+                <AvatarImage src={userData?.imageUrl} />
               </Avatar>
               <div className='flex-1 flex flex-col '>
-                <span className='text-xl font-semibold '>Abdullah Elkıse</span>
+                <span className='text-xl font-semibold '>
+                  {userData?.firstName + ' ' + userData?.lastName}
+                </span>
                 <span className='text-muted-foreground text-sm'>
                   Pro Web Developer
                 </span>
@@ -239,33 +254,45 @@ const SingleUserPage = () => {
               </div>
               <div className='flex items-center gap-4'>
                 <span className='font-semibold'>Full name :</span>
-                <span className=''>Abdullah Elkuse</span>
+                <span className=''>
+                  {userData?.firstName + ' ' + userData?.lastName}
+                </span>
               </div>
               <div className='flex items-center gap-4'>
                 <span className='font-semibold'>Email :</span>
-                <span className=''>abdullah.elkuse@gmail.com</span>
+                <span className=''>
+                  {userData?.primaryEmailAddress?.emailAddress ||
+                    userData?.emailAddresses[0]?.emailAddress}
+                </span>
               </div>
               <div className='flex items-center gap-4'>
                 <span className='font-semibold'>Phone :</span>
-                <span className=''>+90 (555) 555 444 33-21</span>
+                <span className=''>
+                  {userData?.phoneNumbers[0]?.phoneNumber}
+                </span>
               </div>
               <div className='flex items-center gap-4'>
-                <span className='font-semibold'>Address :</span>
-                <span className=''>Main st. 12/22</span>
-              </div>
-              <div className='flex items-center gap-4'>
-                <span className='font-semibold'>City :</span>
-                <span className=''>Aleppo</span>
+                <span className='font-semibold'>Status :</span>
+                <span className=''>
+                  {userData.banned ? 'Banned' : 'Active'}
+                </span>
               </div>
               <div className='flex items-center gap-4'>
                 <span className='font-semibold'>Role :</span>
                 <span className='flex gap-1 items-center bg-accent-foreground rounded-full text-accent py-[2px] px-2 font-bold text-sm '>
-                  <span>Admin</span>{' '}
-                  <BadgeCheck className='w-6 h-6 text-white bg-green-700 rounded-full p-[3px] ' />{' '}
+                  {userData?.publicMetadata?.role === 'admin' ? (
+                    <>
+                      <span>Admin</span>
+                      <BadgeCheck className='w-6 h-6 text-white bg-green-700 rounded-full p-[3px] ' />
+                    </>
+                  ) : (
+                    <span>User</span>
+                  )}
                 </span>
               </div>
               <p className='text-sm text-muted-foreground mt-4'>
-                Joined on 07 October 2023{' '}
+                Joined on{' '}
+                {new Date(userData?.createdAt).toLocaleDateString('tr')}
               </p>
             </div>
           </div>

@@ -38,7 +38,7 @@ interface PaymentsDataTableProps<TData, TValue> {
   data: TData[]
 }
 
-export function PaymentsDataTable<TData, TValue>({
+export function OrdersDataTable<TData, TValue>({
   columns,
   data,
 }: PaymentsDataTableProps<TData, TValue>) {
@@ -85,7 +85,7 @@ export function PaymentsDataTable<TData, TValue>({
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+                <TableHead key={header.index}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(

@@ -1,5 +1,4 @@
 'use client'
-import type { Product } from './/data'
 import type { ColumnDef } from '@tanstack/react-table'
 import { ArrowUpDown, MoreHorizontal } from 'lucide-react'
 import { Button } from '../../../components/ui/button'
@@ -14,8 +13,9 @@ import {
 import Link from 'next/link'
 import { Checkbox } from '../../../components/ui/checkbox'
 import Image from 'next/image'
+import { ProductType } from '@repo/types'
 
-export const PaymentColumns: ColumnDef<Product>[] = [
+export const PaymentColumns: ColumnDef<ProductType>[] = [
   {
     id: 'id',
     accessorKey: 'id',
@@ -43,7 +43,11 @@ export const PaymentColumns: ColumnDef<Product>[] = [
       <div className='flex items-center gap-3 justify-start '>
         <div className='relative w-10 h-10 rounded overflow-hidden'>
           <Image
-            src={row.original.images[row.original.colors[0]!]!}
+            src={
+              (row.original.images as Record<string, string>)?.[
+                row.original.colors[0]!
+              ]!
+            }
             alt={row.original.name}
             fill
             className='object-cover'

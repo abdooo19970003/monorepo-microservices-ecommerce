@@ -1,0 +1,24 @@
+{
+  "name": "email-service",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "check-types": "tsc --noEmit",
+    "dev": "tsx --watch --env-file=.env src/index.ts"
+  },
+  "dependencies": {
+    "@repo/kafka": "*",
+    "nodemailer": "^7.0.9"
+  },
+  "devDependencies": {
+    "@repo/types": "*",
+    "@repo/typescript-config": "*",
+    "@types/node": "latest",
+    "@types/nodemailer": "^7.0.2"
+  }
+}

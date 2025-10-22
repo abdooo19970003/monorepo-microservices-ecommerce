@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
 import { Prisma, prisma } from "@repo/products-db";
 import { producer } from "../utils/kafka";
-import { StripeProductType } from "@repo/types";
+import { cardItemType, StripeProductType } from "@repo/types";
+
+
 
 export const createProduct = async (req: Request, res: Response) => {
   const data: Prisma.ProductCreateInput = req.body;
@@ -67,6 +69,28 @@ export const getAllProducts = async (req: Request, res: Response) => {
   });
   res.status(200).json(products);
 
+}
+export const getLatestProducts = async (req: Request, res: Response) => {
+  const products = await prisma.product.findMany({
+    orderBy: {
+      createdAt: Prisma.SortOrder.desc,
+    },
+    take: 5,
+  });
+  const cardsData: cardItemType[] = []
+  for (const product of products) {
+    let cardItem: cardItemType = {
+      id: product.id,
+      title: product.name,
+      image: (product.images as Record<string, string>)?.[product.colors[0]!] || " ",
+      count: product.price,
+      badge: product.categorySlug || " "
+    }
+    cardsData.push(cardItem)
+
+
+  }
+  res.status(200).json(cardsData);
 }
 export const getProduct = async (req: Request, res: Response) => {
   const id = req.params.id;

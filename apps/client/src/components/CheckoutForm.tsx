@@ -4,10 +4,11 @@ import React, { useState } from 'react'
 import { ShippingFormType } from '@repo/types'
 import { ConfirmError } from '@stripe/stripe-js'
 import { Loader } from 'lucide-react'
+import useCartStore from '../store/cart-store'
 
 const CheckoutForm = ({ shippingForm }: { shippingForm: ShippingFormType }) => {
   const checkout = useCheckout()
-
+  const { clearCart } = useCartStore()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<ConfirmError | null>(null)
   const handleClick = async () => {
@@ -16,10 +17,9 @@ const CheckoutForm = ({ shippingForm }: { shippingForm: ShippingFormType }) => {
     if (checkout.type == 'error') setError(checkout.error as ConfirmError)
     else if (checkout.type == 'loading') {
       setLoading(true)
-      console.log(checkout)
     }
     if (checkout.type == 'success') {
-      console.log(checkout)
+      clearCart()
       await checkout.checkout.updateEmail(shippingForm.email)
       await checkout.checkout.updateShippingAddress({
         name: shippingForm.name,
@@ -30,7 +30,6 @@ const CheckoutForm = ({ shippingForm }: { shippingForm: ShippingFormType }) => {
         },
       })
       const res = await checkout.checkout.confirm()
-      console.log(res)
       if (res.type === 'error') setError(res.error as ConfirmError)
       setLoading(false)
     }

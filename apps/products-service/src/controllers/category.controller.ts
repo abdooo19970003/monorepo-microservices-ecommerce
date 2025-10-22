@@ -1,9 +1,25 @@
 import { Prisma, prisma } from "@repo/products-db";
 import { Request, Response } from "express";
 
-
+const slugify = (str: string) => {
+  return str
+    .toString()
+    .trim()
+    // Convert to lowercase (only affects Latin letters, Arabic stays as-is)
+    .toLowerCase()
+    // Replace spaces and underscores with a dash
+    .replace(/[\s_]+/g, "-")
+    // Remove all characters except letters (Arabic + Latin), numbers, and dashes
+    .replace(/[^a-z0-9\u0600-\u06FF-]+/g, "")
+    // Remove multiple dashes
+    .replace(/-+/g, "-")
+    // Remove leading/trailing dashes
+    .replace(/^-+|-+$/g, "");
+}
 export const createCategory = async (req: Request, res: Response) => {
   const data: Prisma.CategoryCreateInput = req.body;
+  if (!data.name) return res.status(400).json({ message: "Name is required" });
+  data.slug = slugify(data.name);
   const category = await prisma.category.create({ data });
   res.status(201).json(category);
 }

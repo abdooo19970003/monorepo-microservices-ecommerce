@@ -2,7 +2,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import z from 'zod'
 import {
   Form,
   FormControl,
@@ -24,112 +23,75 @@ import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
 import { Checkbox } from './ui/checkbox'
 import { ScrollArea } from './ui/scroll-area'
-
-const cateegories = [
-  'General',
-  'T-Shirts',
-  'Shoes',
-  'Pants',
-  'Accessories',
-  'Jackets',
-  'Gloves',
-  'Hats',
-  'Watches',
-  'Bags',
-  'Sunglasses',
-]
-const sizes = [
-  'NoSize',
-  'XS',
-  'S',
-  'M',
-  'L',
-  'XL',
-  'XXL',
-  '34',
-  '35',
-  '36',
-  '37',
-  '38',
-  '39',
-  '40',
-  '41',
-  '42',
-  '43',
-  '44',
-  '45',
-  '46',
-  '47',
-  '48',
-]
-
-const colors = [
-  'NoColor',
-  'White',
-  'Black',
-  'Red',
-  'Blue',
-  'Green',
-  'Yellow',
-  'Orange',
-  'Purple',
-  'Pink',
-  'Brown',
-  'Gray',
-  'Silver',
-  'Gold',
-]
-
-export const newProductSchema = z
-  .object({
-    name: z.string().min(3).max(50),
-    price: z
-      .string()
-      .regex(/^\d+(\.\d{1,2})?$/, 'should be a number')
-      .min(1),
-    shortDescription: z.string().min(3).max(100),
-    description: z.string().min(3).max(1000),
-    category: z.enum(cateegories),
-    colors: z.array(z.enum(colors)),
-    sizes: z.array(z.enum(sizes)),
-    images: z.record(z.string(), z.string().min(1, 'Image is required')),
-  })
-  .superRefine((data, ctx) => {
-    for (const color of data.colors) {
-      if (!data.images[color]) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['images', color],
-          message: `image is required for ${color} color`,
-        })
-      }
-    }
-  })
-export type NewProductFormType = z.infer<typeof newProductSchema>
+import { useMutation, useQuery } from '@tanstack/react-query'
+import { getData as getCategories } from '../app/(root)/categories/data'
+import {
+  colors,
+  NewProductFormType,
+  newProductSchema,
+  sizes,
+} from '@repo/types'
+import { useAuth } from '@clerk/nextjs'
+import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
+import { uploadProductImage } from '../lib/server-utils'
+import { cn } from '../lib/utils'
 
 const NewProductForm = () => {
-  const form = useForm<NewProductFormType>({
+  const categories = useQuery({
+    queryKey: ['categories'],
+    queryFn: getCategories,
+  })
+  const form = useForm({
     resolver: zodResolver(newProductSchema),
     defaultValues: {
-      category: '',
-      colors: [],
-      sizes: [],
-      images: {},
       name: '',
       price: '',
       shortDescription: '',
       description: '',
+      categorySlug: '',
+      colors: [],
+      sizes: [],
+      images: {},
+    },
+  })
+  const { getToken } = useAuth()
+  const submitHandler = useMutation({
+    mutationFn: async (values: NewProductFormType) => {
+      const token = await getToken()
+      if (!token) {
+        throw new Error('Unauthorized')
+      }
+      const url = `${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products`
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(values),
+      })
+      if (!response.ok) {
+        toast.error('Faild to create product')
+        throw new Error('Faild to create product')
+      }
+      return await response.json()
+    },
+    onError: (error) => {
+      toast.error('Faild to create product')
+    },
+    onSuccess: () => {
+      form.reset()
+      toast.success('Product created successfully')
     },
   })
 
-  const submitHandler = (values: NewProductFormType) => {
-    console.log(values)
-  }
+  const imageUrls: Record<string, string> = form.watch(`images`)
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(submitHandler)}
+        onSubmit={form.handleSubmit((values) => submitHandler.mutate(values))}
         className='space-y-8'
       >
         <FormField
@@ -149,7 +111,7 @@ const NewProductForm = () => {
           <div className='flex flex-col gap-8'>
             <FormField
               control={form.control}
-              name='category'
+              name='categorySlug'
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Category</FormLabel>
@@ -163,12 +125,12 @@ const NewProductForm = () => {
                         <SelectValue placeholder='Select Category' />
                       </SelectTrigger>
                       <SelectContent>
-                        {cateegories.map((category) => (
+                        {categories.data?.map((category) => (
                           <SelectItem
-                            key={category}
-                            value={category}
+                            key={category.id}
+                            value={category.slug}
                           >
-                            {category}
+                            {category.name}
                           </SelectItem>
                         ))}
                       </SelectContent>
@@ -185,7 +147,10 @@ const NewProductForm = () => {
                 <FormItem>
                   <FormLabel>Price</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input
+                      {...field}
+                      value={String(field.value ?? '')}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -279,7 +244,6 @@ const NewProductForm = () => {
                             className='flex  gap-1 '
                           >
                             <Checkbox
-                              {...field}
                               id={color}
                               checked={field.value.includes(color)}
                               onCheckedChange={(checked) => {
@@ -322,25 +286,34 @@ const NewProductForm = () => {
                               className='grid grid-cols-9 items-center'
                             >
                               <span
-                                style={{ background: color }}
+                                style={{
+                                  backgroundColor: color,
+                                  backgroundImage: `url(${imageUrls?.[color]})`,
+                                  backgroundSize: 'cover',
+                                  backgroundPosition: 'center',
+                                  backgroundRepeat: 'no-repeat',
+                                }}
                                 className='h-6 w-6 rounded-sm'
                               ></span>
                               <span className='col-span-2'>{color}</span>
                               <Input
                                 type='file'
-                                accept='images/*'
-                                className='col-span-6'
+                                accept='image/*'
+                                className={cn(
+                                  'col-span-6 border-2 transition-colors duration-300',
+                                  imageUrls?.[color]
+                                    ? 'border-green-500'
+                                    : 'border-red-500'
+                                )}
                                 onChange={(e) => {
-                                  if (
-                                    e.target.files &&
-                                    e.target.files.length > 0
-                                  )
-                                    form.setValue('images', {
-                                      ...form.getValues().images,
-                                      [color]: e.target.files[0]
-                                        ? e.target.files[0].name
-                                        : '',
-                                    })
+                                  const file = e.target.files?.[0]
+                                  if (file) {
+                                    uploadProductImage(file)
+                                      .then((url) => {
+                                        form.setValue(`images.${color}`, url)
+                                      })
+                                      .catch((err) => toast.error(err.message))
+                                  }
                                 }}
                               />
                               <p className='text-red-500 col-span-9 text-end'>
@@ -370,8 +343,16 @@ const NewProductForm = () => {
         <Button
           className='w-full'
           type='submit'
+          disabled={submitHandler.isPending}
         >
-          Create
+          {submitHandler.isPending ? (
+            <>
+              <Loader />
+              Creating
+            </>
+          ) : (
+            <span>Create</span>
+          )}
         </Button>
       </form>
     </Form>

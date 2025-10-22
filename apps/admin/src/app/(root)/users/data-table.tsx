@@ -15,7 +15,6 @@ import {
 } from '../../../components/ui/table'
 import {
   type ColumnDef,
-  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -32,13 +31,15 @@ import {
   Trash2,
 } from 'lucide-react'
 import { useState } from 'react'
+import { DeleteUsersButton } from './DeleteUserButton'
+import { User } from '@clerk/nextjs/server'
 
 interface PaymentsDataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
 }
 
-export function PaymentsDataTable<TData, TValue>({
+export function UsersDataTable<TData, TValue>({
   columns,
   data,
 }: PaymentsDataTableProps<TData, TValue>) {
@@ -64,20 +65,19 @@ export function PaymentsDataTable<TData, TValue>({
     onSortingChange: setSorting,
     state: { pagination, sorting: sorting as SortingState, rowSelection },
   })
-  // console.log(rowSelection)
+  const selectedrows = table.getSelectedRowModel().rows
+  const selectedIds = Promise.all(
+    selectedrows
+      .map((row) => (row.original as User).id)
+      .map((id) => id)
+      .filter((id) => id)
+  )
 
   return (
     <div className='rounded-md '>
       {Object.keys(rowSelection).length > 0 && (
         <div className='flex justify-end'>
-          <Button variant='outline'>
-            Delete{' '}
-            <span className='text-red-500 text-lg'>
-              {Object.keys(rowSelection).length}
-            </span>{' '}
-            Users
-            <Trash2 />
-          </Button>
+          <DeleteUsersButton rowSelection={selectedIds} />
         </div>
       )}
       <Table>

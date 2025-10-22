@@ -1,5 +1,4 @@
 'use client'
-import type { User } from './data'
 import type { ColumnDef } from '@tanstack/react-table'
 import {
   ArrowUpDown,
@@ -25,6 +24,8 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '../../../components/ui/avatar'
+import { User } from '@clerk/nextjs/server'
+import DeleteUserButton from './DeleteUserButton'
 
 export const PaymentColumns: ColumnDef<User>[] = [
   {
@@ -48,31 +49,39 @@ export const PaymentColumns: ColumnDef<User>[] = [
     ),
   },
   {
-    accessorKey: 'fullName',
+    id: 'full-name',
     header: 'Full Name',
-    cell: ({ row }) => (
-      <div className=' flex justify-start gap-3 items-center'>
-        <Avatar>
-          <AvatarFallback>
-            {String(row.getValue('fullName')).substring(0, 2)}
-          </AvatarFallback>
-          <AvatarImage src={row.original.image} />
-        </Avatar>
-        <span>{row.getValue('fullName')}</span>
-      </div>
-    ),
+    cell: ({ row }) => {
+      const user = row.original
+      const chars =
+        user.firstName && user.lastName
+          ? user.firstName.charAt(0) + user.lastName.charAt(0)
+          : user.primaryEmailAddress?.emailAddress.charAt(0)
+      const fullname = user.firstName + ' ' + user.lastName
+      return (
+        <div className=' flex justify-start gap-3 items-center'>
+          <Avatar>
+            <AvatarFallback>{chars}</AvatarFallback>
+            <AvatarImage src={row.original.imageUrl} />
+          </Avatar>
+          <span>{fullname}</span>
+        </div>
+      )
+    },
   },
   {
     accessorKey: 'email',
     header: 'Email',
     cell({ row }) {
       return (
-        <Link href={`mailto:` + row.original.email}>{row.original.email}</Link>
+        <Link href={`mailto:` + row.original.primaryEmailAddress?.emailAddress}>
+          {row.original.emailAddresses[0]?.emailAddress}
+        </Link>
       )
     },
   },
   {
-    accessorKey: 'status',
+    accessorKey: 'banned',
     header: ({ column }) => {
       return (
         <Button
@@ -85,18 +94,18 @@ export const PaymentColumns: ColumnDef<User>[] = [
       )
     },
     cell: ({ row }) => {
-      const status = row.getValue('status')
+      const status = row.getValue('banned')
       return (
         <Badge
           className={cn(
             ' capitalize text-white ',
-            status === 'active' && 'bg-green-600',
-            status === 'inactive' && 'bg-gray-600'
+            status === false && 'bg-green-600',
+            status === true && 'bg-gray-600'
           )}
         >
-          {status === 'active' && <CheckCircle className='h-6 w-6' />}
-          {status === 'inactive' && <MinusCircle className='h-6 w-6' />}
-          {status as string}
+          {status === false && <CheckCircle className='h-6 w-6' />}
+          {status === true && <MinusCircle className='h-6 w-6' />}
+          {!status ? 'Active' : 'Banned'}
         </Badge>
       )
     },
@@ -131,6 +140,9 @@ export const PaymentColumns: ColumnDef<User>[] = [
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
               <Link href={`/users/${user.id}`}>View Details</Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <DeleteUserButton id={user.id} />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

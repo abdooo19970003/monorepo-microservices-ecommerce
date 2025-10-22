@@ -1,7 +1,6 @@
 import {
   BanknoteArrowDown,
   BanknoteArrowUp,
-  Calendar,
   ChevronDown,
   ChevronUp,
   Code,
@@ -13,9 +12,7 @@ import {
   Package,
   PackagePlus,
   Plus,
-  Projector,
   Search,
-  Settings,
   User2,
   UserPlus,
   Users,
@@ -143,7 +140,7 @@ const AppSidebar = () => {
         </SidebarGroup>
 
         <SidebarGroup>
-          <SidebarGroupLabel>Orders & Paymensts</SidebarGroupLabel>
+          <SidebarGroupLabel>Products</SidebarGroupLabel>
           <Sheet>
             <SheetTrigger asChild>
               <SidebarGroupAction>
@@ -175,10 +172,12 @@ const AppSidebar = () => {
                 </Sheet>
               </SidebarMenuItem>
               <SidebarMenuItem>
-                <SidebarMenuButton>
-                  <LucideTable />
-                  <span>All Categories</span>
-                </SidebarMenuButton>
+                <Link href='/categories'>
+                  <SidebarMenuButton>
+                    <LucideTable />
+                    <span>All Categories</span>
+                  </SidebarMenuButton>
+                </Link>
               </SidebarMenuItem>
               <SidebarMenuItem>
                 <Sheet>
@@ -200,14 +199,6 @@ const AppSidebar = () => {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link href='/payments'>
-                    <BanknoteArrowUp />
-                    <span>All Payments</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link href='/orders'>

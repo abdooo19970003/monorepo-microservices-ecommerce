@@ -1,3 +1,6 @@
+import { auth } from "@clerk/nextjs/server"
+import { OrderType } from "@repo/types"
+
 export type Payment = {
   id: string
   amount: number
@@ -51,10 +54,22 @@ export const paymentsData: Payment[] = [
   { "id": "i5j6k7l8", "amount": 590, "status": "pending", "email": "connor.bishop@outlook.com", "fullName": "Connor Bishop", "userId": "9be00970" },
 ]
 
-export const getData = async (): Promise<Payment[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(paymentsData)
-    }, 1000)
-  })
+export const getData = async (): Promise<OrderType[]> => {
+  try {
+    const { getToken } = await auth()
+    const token = await getToken()
+    const res = await fetch(`${process.env.NEXT_PUBLIC_ORDER_SERVICE_URL}/orders`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    const data = await res.json()
+    return data
+  } catch (error) {
+    console.log(`Error Fetching Orders Data`, error);
+    return [];
+
+
+  }
 }

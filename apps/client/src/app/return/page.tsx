@@ -1,4 +1,3 @@
-import { StripeCheckoutSession } from '@stripe/stripe-js'
 import React from 'react'
 
 const PaymentRecived = async ({
@@ -11,7 +10,6 @@ const PaymentRecived = async ({
   if (!session_id) return <div>No session id provided</div>
   // Here you can fetch the session details from your backend or directly from Stripe
   // using the session_id to confirm the payment status and display relevant information.
-
   const res = await fetch(
     process.env.NEXT_PUBLIC_PAYMENT_SERVICE_URL + `/session/${session_id}`,
     {

@@ -1,10 +1,11 @@
 import express, { Request, Response } from "express"
 import cors from "cors"
 import { clerkMiddleware } from "@clerk/express"
-import { shouldBeUser } from "./middleware/authMiddleware.js"
+import { shouldBeAdmin, shouldBeUser } from "./middleware/authMiddleware.js"
 
 import productRouter from "./routes/product.route"
 import categoryRouter from "./routes/category.route"
+import utilsRouter from "./routes/utils.route"
 import { consumer, producer } from "./utils/kafka.js"
 
 
@@ -13,7 +14,7 @@ const app = express()
 // Middleware
 app.use(express.json())
 app.use(cors({
-  origin: ["http://localhost:3000", "http://localhost:8000", "http://localhost:8001"],
+  origin: ["http://localhost:3000", "http://localhost:3001", "http://localhost:8000", "http://localhost:8001"],
   credentials: true
 }))
 app.use(clerkMiddleware())
@@ -22,7 +23,7 @@ app.use(clerkMiddleware())
 // Routes
 app.use("/products", productRouter)
 app.use("/categories", categoryRouter)
-
+app.use("/utils", utilsRouter)
 // Endpoints 
 app.get("/health", (req: Request, res: Response) => {
   res.status(200).json({

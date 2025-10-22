@@ -6,12 +6,12 @@ import {
   BreadcrumbSeparator,
 } from '../../../components/ui/breadcrumb'
 import { LucideHome } from 'lucide-react'
-import { getData, type Product } from './data'
-import { PaymentsDataTable } from './data-table'
+import { getData } from './data'
+import { ProductsDataTable } from './data-table'
 import { PaymentColumns } from './columns'
 
 const UsersPage = async () => {
-  const data: Product[] = await getData()
+  const data = await getData()
   const columns = PaymentColumns
   return (
     <div>
@@ -31,7 +31,7 @@ const UsersPage = async () => {
       <div className='mb-8 px-4 py-2 bg-secondary rounded-lg'>
         <h1 className='text-lg font-semibold'>All Products</h1>
         <div className=''>
-          <PaymentsDataTable
+          <ProductsDataTable
             columns={columns}
             data={data}
           />

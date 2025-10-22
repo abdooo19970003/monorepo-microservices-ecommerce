@@ -12,14 +12,15 @@
     "check-teypes": "tsc --npEmit"
   },
   "devDependencies": {
-    "@repo/typescript-config": "*",
     "@repo/types": "*",
+    "@repo/typescript-config": "*",
     "typescript": "5.9.3"
   },
   "dependencies": {
     "@clerk/fastify": "^2.4.36",
-    "fastify": "^5.6.1",
+    "@repo/kafka": "*",
     "@repo/orders-db": "^1.0.0",
-    "@repo/kafka": "*"
+    "date-fns": "^4.1.0",
+    "fastify": "^5.6.1"
   }
 }

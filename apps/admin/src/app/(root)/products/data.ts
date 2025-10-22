@@ -1,16 +1,9 @@
-export type Product = {
-  id: string | number
-  price: number
-  name: string
-  shortDescription: string
-  description: string
-  sizes: string[]
-  colors: string[]
-  images: Record<string, string>
-}
-export const productsData: Product[] = [
+import { ProductsType, ProductType } from "@repo/types"
+
+
+export const dummyProductsData: ProductType[] = [
   {
-    id: 1,
+    id: "1",
     name: "Adidas CoreFit T-Shirt",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -24,9 +17,12 @@ export const productsData: Product[] = [
       purple: "/products/1p.png",
       green: "/products/1gr.png",
     },
+    createdAt: new Date(),
+    categorySlug: "t-shirts",
+    updatedAt: new Date(),
   },
   {
-    id: 2,
+    id: "2",
     name: "Puma Ultra Warm Zip",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -36,9 +32,13 @@ export const productsData: Product[] = [
     sizes: ["s", "m", "l", "xl"],
     colors: ["gray", "green"],
     images: { gray: "/products/2g.png", green: "/products/2gr.png" },
+
+    createdAt: new Date(),
+    categorySlug: "jakets",
+    updatedAt: new Date(),
   },
   {
-    id: 3,
+    id: "3",
     name: "Nike Air Essentials Pullover",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -52,9 +52,13 @@ export const productsData: Product[] = [
       blue: "/products/3b.png",
       black: "/products/3bl.png",
     },
+
+    createdAt: new Date(),
+    categorySlug: "jakets",
+    updatedAt: new Date(),
   },
   {
-    id: 4,
+    id: "4",
     name: "Nike Dri Flex T-Shirt",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -64,9 +68,13 @@ export const productsData: Product[] = [
     sizes: ["s", "m", "l"],
     colors: ["white", "pink"],
     images: { white: "/products/4w.png", pink: "/products/4p.png" },
+
+    createdAt: new Date(),
+    categorySlug: "t-shirts",
+    updatedAt: new Date(),
   },
   {
-    id: 5,
+    id: "5",
     name: "Under Armour StormFleece",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -80,9 +88,13 @@ export const productsData: Product[] = [
       orange: "/products/5o.png",
       black: "/products/5bl.png",
     },
+
+    createdAt: new Date(),
+    categorySlug: "shoes",
+    updatedAt: new Date(),
   },
   {
-    id: 6,
+    id: "6",
     name: "Nike Air Max 270",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -92,9 +104,13 @@ export const productsData: Product[] = [
     sizes: ["40", "42", "43", "44"],
     colors: ["gray", "white"],
     images: { gray: "/products/6g.png", white: "/products/6w.png" },
+
+    createdAt: new Date(),
+    categorySlug: "shoes",
+    updatedAt: new Date(),
   },
   {
-    id: 7,
+    id: "7",
     name: "Nike Ultraboost Pulse ",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -104,9 +120,13 @@ export const productsData: Product[] = [
     sizes: ["40", "42", "43"],
     colors: ["gray", "pink"],
     images: { gray: "/products/7g.png", pink: "/products/7p.png" },
+
+    createdAt: new Date(),
+    categorySlug: "t-shirts",
+    updatedAt: new Date(),
   },
   {
-    id: 8,
+    id: "8",
     name: "Levi’s Classic Denim",
     shortDescription:
       "Lorem ipsum dolor sit amet consect adipisicing elit lorem ipsum dolor sit.",
@@ -116,15 +136,22 @@ export const productsData: Product[] = [
     sizes: ["s", "m", "l"],
     colors: ["blue", "green"],
     images: { blue: "/products/8b.png", green: "/products/8gr.png" },
+
+    createdAt: new Date(),
+    categorySlug: "shirts",
+    updatedAt: new Date(),
   },
 ];
 
 
-
-export const getData = async (): Promise<Product[]> => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(productsData)
-    }, 1000)
-  })
+export const getData = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_PRODUCT_SERVICE_URL}/products`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+  const data = await res.json()
+  return data as ProductsType
 }

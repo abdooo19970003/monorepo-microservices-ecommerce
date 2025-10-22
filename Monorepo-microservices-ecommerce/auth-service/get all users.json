@@ -1,0 +1,25 @@
+{
+  "name": "get all users",
+  "request": {
+    "type": "http",
+    "url": "{{AUTH_SERVICE_URL}}/users",
+    "scripts": {
+      "preRequest": "",
+      "postResponse": ""
+    },
+    "method": "GET",
+    "queryParams": [],
+    "headers": [],
+    "body": null,
+    "contentType": "text/plain",
+    "auth": {
+      "currentAuthType": "BEARER_TOKEN",
+      "authConfigStore": {
+        "BEARER_TOKEN": {
+          "bearer": "eyJhbGciOiJSUzI1NiIsImNhdCI6ImNsX0I3ZDRQRDExMUFBQSIsImtpZCI6Imluc18zM1lQZkhhY2hIQU03MkZYUWpNekdHeG95dnUiLCJ0eXAiOiJKV1QifQ.eyJhenAiOiJodHRwOi8vbG9jYWxob3N0OjMwMDEiLCJleHAiOjE3NjA4Njc3OTUsImZ2YSI6WzQzLC0xXSwiaWF0IjoxNzYwODY3NzM1LCJpc3MiOiJodHRwczovL3RoYW5rZnVsLWxhY2V3aW5nLTM2LmNsZXJrLmFjY291bnRzLmRldiIsImp0aSI6ImU5ZjA3NzY1MzcwMTI1NWM4OTRhIiwibWV0YWRhdGEiOnsicm9sZSI6ImFkbWluIn0sIm5iZiI6MTc2MDg2NzcyNSwic2lkIjoic2Vzc18zNEhLWjN5NGZDc0NZSjdyRVFPc1dwWTcxaWIiLCJzdHMiOiJhY3RpdmUiLCJzdWIiOiJ1c2VyXzMzWVIwOHRzNm9UY2hvV3drSVlWaEZ0Rk9RdSIsInYiOjJ9.nYsJnL8E706kK5BOOVvhFm9a5WzCcTQel9Kh3wZQM_5GWtwvwN7n4cfLzfxtEH8bB55EbESjrBW_3OudUZRjpcw4YqC9umy9fMZcZ63A4AYosGkQhjVaVQ13WnA7FRedXCF-juW-EywyWe4wsesgtRVwNPOZdXgO-dUZ2CEtgv2iVeVNpZ8_ayvQTsl10SqXDZUVP9MAdLd2Sqoed56Tx3FUv9K9FqXokK3q74qCZm5iux2eFwGRv3CfX95_Cng4ET5urZkvXuOk2gQjl0Fv55fCuuE2D-ZK3yKKk3KJ_d0wRHcn9GrdPNfxDwocfZ2ahNRsmhhZ2jjc923lAzUVwQ"
+        }
+      }
+    },
+    "pathVariables": []
+  }
+}
