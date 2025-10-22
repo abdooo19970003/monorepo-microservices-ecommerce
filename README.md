@@ -1,144 +1,123 @@
-# complete the course from this vedio link
-## 04:05:21 kafka <https://youtu.be/O9YnPuKC4w4?si=JnNsAVQ77ML37fkX&t=14721>
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg)](https://youtu.be/O9YnPuKC4w4?si=JnNsAVQ77ML37fkX&t=14721)
+# E-commerce Microservices Monorepo
 
-# Turborepo starter
+This repository is an e-commerce platform built as a Turborepo-style monorepo. It includes Next.js frontend(s), shared UI packages and microservices (example: payment-service). The goal is a realistic, modular codebase for development and experimentation.
 
-This Turborepo starter is maintained by the Turborepo core team.
+## Contents
+- apps/web — Next.js storefront
+- apps/docs — Next.js docs (if present)
+- apps/payment-service — Hono + Stripe payment microservice
+- packages/* — shared code (types, ui, utils)
 
-## Using this example
+## Quick start (developer machine)
 
-Run the following command:
+Prerequisites
+- Node.js v18+ (or the version specified in .nvmrc)
+- pnpm / npm / yarn (examples below use pnpm)
+- Git
 
-```sh
-npx create-turbo@latest
+Clone
+```bash
+git clone https://github.com/your-username/your-repo-name.git
+cd your-repo-name
 ```
 
-## What's inside?
+Install
+```bash
+# using pnpm
+pnpm install
 
-This Turborepo includes the following packages/apps:
+# or npm
+# npm install
 
-### Apps and Packages
-
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build
-yarn dlx turbo build
-pnpm exec turbo build
+# or yarn
+# yarn install
 ```
 
-You can build a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
+Run services locally
+Option A — run each app manually:
+```bash
+# Start web (Next.js)
+cd apps/web
+pnpm dev
 
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo build --filter=docs
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo build --filter=docs
-yarn exec turbo build --filter=docs
-pnpm exec turbo build --filter=docs
-```
-
-### Develop
-
-To develop all apps and packages, run the following command:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev
-yarn exec turbo dev
-pnpm exec turbo dev
+# In a separate terminal, start the payment service
+cd ../../apps/payment-service
+pnpm dev
 ```
 
-You can develop a specific package by using a [filter](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters):
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo dev --filter=web
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo dev --filter=web
-yarn exec turbo dev --filter=web
-pnpm exec turbo dev --filter=web
+Option B — run in parallel from repo root (if scripts are configured)
+```bash
+# Example: repo root may expose a dev script that starts services in parallel
+pnpm dev
 ```
 
-### Remote Caching
+Open http://localhost:3000 (web) and http://localhost:8002 (payment-service) or the ports printed by each service.
 
-> [!TIP]
-> Vercel Remote Cache is free for all plans. Get started today at [vercel.com](https://vercel.com/signup?/signup?utm_source=remote-cache-sdk&utm_campaign=free_remote_cache).
+## Environment variables
 
-Turborepo can use a technique known as [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Create per-app .env files (examples below). Never commit real secrets.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup?utm_source=turborepo-examples), then enter the following commands:
-
-```
-cd my-turborepo
-
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo login
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo login
-yarn exec turbo login
-pnpm exec turbo login
+apps/web/.env.local
+```env
+# filepath: apps/web/.env.local
+NEXT_PUBLIC_STRIPE_PK=pk_test_...
+NEXT_PUBLIC_PAYMENT_SERVICE_URL=http://localhost:8002
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_clerk_...
+# any other NEXT_PUBLIC_* used in the web app
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-# With [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation) installed (recommended)
-turbo link
-
-# Without [global `turbo`](https://turborepo.com/docs/getting-started/installation#global-installation), use your package manager
-npx turbo link
-yarn exec turbo link
-pnpm exec turbo link
+apps/payment-service/.env
+```env
+# filepath: apps/payment-service/.env
+STRIPE_SECRET_KEY=sk_test_...
+PAYMENT_SERVICE_PORT=8002
+# optional: DATABASE_URL, REDIS_URL, or other secrets your service needs
 ```
 
-## Useful Links
+Important: the frontend must receive a PaymentIntent client_secret (pi_..._secret_...) for Stripe Elements. If your payment-service creates a Checkout Session, expand or create the underlying PaymentIntent and return its client_secret to the frontend. Checkout Session client secrets (cs_...) are not compatible with Elements.
 
-Learn more about the power of Turborepo:
+## Debugging tips
+- Ensure `apps/web` files using React hooks have `"use client"` as the very first non-comment line.
+- Log values returned from the payment-service to confirm you return a `pi_..._secret_...`.
+- Check browser console/network and the payment-service logs for errors.
 
-- [Tasks](https://turborepo.com/docs/crafting-your-repository/running-tasks)
-- [Caching](https://turborepo.com/docs/crafting-your-repository/caching)
-- [Remote Caching](https://turborepo.com/docs/core-concepts/remote-caching)
-- [Filtering](https://turborepo.com/docs/crafting-your-repository/running-tasks#using-filters)
-- [Configuration Options](https://turborepo.com/docs/reference/configuration)
-- [CLI Usage](https://turborepo.com/docs/reference/command-line-reference)
+## Tests & linting
+- Run tests (if present):
+```bash
+pnpm test
+```
+- Lint:
+```bash
+pnpm lint
+```
 
-## database variables
-### products 
-![alt text](image.png)
+## Contributing (pro developer workflow)
+1. Fork the repo and clone your fork.
+2. Create a feature branch:
+```bash
+git checkout -b feat/your-feature
+```
+3. Install and run the app locally, add tests for new behavior.
+4. Follow the project's linting and formatting rules. Run:
+```bash
+pnpm lint
+pnpm format
+```
+5. Commit with clear messages:
+```bash
+git add .
+git commit -m "feat(payments): add payment-intent creation endpoint"
+```
+6. Push and open a Pull Request against the main repository. Include:
+   - Short description of the change
+   - How to run/test locally
+   - Any env vars required
+7. Address review comments, keep PRs small and focused.
 
+## Maintainership notes
+- Keep secrets out of the repo.
+- Prefer creating PaymentIntents for direct Elements integrations.
+- Use shared types in `@repo/types` to avoid duplication across apps/services.
+
+## Contact / Support
+For questions or issues, open an issue in the repository with reproduction steps and relevant logs.
